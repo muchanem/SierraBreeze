@@ -1,3 +1,7 @@
+
+ ![alt text](https://i.imgur.com/vbH9sWZ.png)
+
+
 In order to install the theme and add it to your decorations do the following:
 ``` shell
 git clone https://github.com/jomada/SierraBreeze
