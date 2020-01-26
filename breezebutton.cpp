@@ -213,7 +213,7 @@ namespace SierraBreeze
                 {
                   QColor button_color = QColor(230, 61, 110);
                   if (!c->isActive())
-                    button_color = QColor(255, 67, 123);
+                    button_color = QColor(255, 74, 130);
                   painter->setBrush( button_color );
                   painter->setPen( Qt::NoPen );
                   painter->drawEllipse( QRectF( 0, 0, 18, 18 ) );
@@ -284,7 +284,7 @@ namespace SierraBreeze
                 {
                   QColor button_color = QColor(25, 192, 201);
                   if (!c->isActive())
-                    button_color = QColor(26, 172, 220);
+                    button_color = QColor(25, 202, 211);
                   painter->setBrush( button_color );
                   painter->setPen( Qt::NoPen );
                   // painter->drawEllipse( QRectF( 3, 3, 12, 12 ) );
