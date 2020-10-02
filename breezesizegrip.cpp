@@ -64,7 +64,7 @@ namespace SierraBreeze
         updatePosition();
 
         // connections
-        auto c = decoration->client().data();
+        auto c = decoration->client().toStrongRef().data();
         connect( c, &KDecoration2::DecoratedClient::widthChanged, this, &SizeGrip::updatePosition );
         connect( c, &KDecoration2::DecoratedClient::heightChanged, this, &SizeGrip::updatePosition );
         connect( c, &KDecoration2::DecoratedClient::activeChanged, this, &SizeGrip::updateActiveState );
@@ -101,7 +101,7 @@ namespace SierraBreeze
         #if BREEZE_HAVE_X11
 
         if( !QX11Info::isPlatformX11() ) return;
-        auto c = m_decoration.data()->client().data();
+        auto c = m_decoration.data()->client().toStrongRef().data();
 
         xcb_window_t windowId = c->windowId();
         if( windowId )
@@ -196,7 +196,7 @@ namespace SierraBreeze
         #if BREEZE_HAVE_X11
         if( !QX11Info::isPlatformX11() ) return;
 
-        auto c = m_decoration.data()->client().data();
+        auto c = m_decoration.data()->client().toStrongRef().data();
         QPoint position(
             c->width() - GripSize - Offset,
             c->height() - GripSize - Offset );
@@ -218,7 +218,7 @@ namespace SierraBreeze
         auto connection( QX11Info::connection() );
 
         // client
-        auto c = m_decoration.data()->client().data();
+        auto c = m_decoration.data()->client().toStrongRef().data();
 
         /*
         get root position matching position

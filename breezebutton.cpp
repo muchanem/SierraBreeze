@@ -26,6 +26,7 @@
 #include <KColorUtils>
 
 #include <QPainter>
+#include <QPainterPath>
 
 namespace SierraBreeze
 {
@@ -54,7 +55,7 @@ namespace SierraBreeze
         setIconSize(QSize( height, height ));
 
         // connections
-        connect(decoration->client().data(), SIGNAL(iconChanged(QIcon)), this, SLOT(update()));
+        connect(decoration->client().toStrongRef().data(), SIGNAL(iconChanged(QIcon)), this, SLOT(update()));
         connect(decoration->settings().data(), &KDecoration2::DecorationSettings::reconfigured, this, &Button::reconfigure);
         connect( this, &KDecoration2::DecorationButton::hoveredChanged, this, &Button::updateAnimationState );
 
@@ -86,32 +87,32 @@ namespace SierraBreeze
             {
 
                 case DecorationButtonType::Close:
-                b->setVisible( d->client().data()->isCloseable() );
-                QObject::connect(d->client().data(), &KDecoration2::DecoratedClient::closeableChanged, b, &SierraBreeze::Button::setVisible );
+                b->setVisible( d->client().toStrongRef().data()->isCloseable() );
+                QObject::connect(d->client().toStrongRef().data(), &KDecoration2::DecoratedClient::closeableChanged, b, &SierraBreeze::Button::setVisible );
                 break;
 
                 case DecorationButtonType::Maximize:
-                b->setVisible( d->client().data()->isMaximizeable() );
-                QObject::connect(d->client().data(), &KDecoration2::DecoratedClient::maximizeableChanged, b, &SierraBreeze::Button::setVisible );
+                b->setVisible( d->client().toStrongRef().data()->isMaximizeable() );
+                QObject::connect(d->client().toStrongRef().data(), &KDecoration2::DecoratedClient::maximizeableChanged, b, &SierraBreeze::Button::setVisible );
                 break;
 
                 case DecorationButtonType::Minimize:
-                b->setVisible( d->client().data()->isMinimizeable() );
-                QObject::connect(d->client().data(), &KDecoration2::DecoratedClient::minimizeableChanged, b, &SierraBreeze::Button::setVisible );
+                b->setVisible( d->client().toStrongRef().data()->isMinimizeable() );
+                QObject::connect(d->client().toStrongRef().data(), &KDecoration2::DecoratedClient::minimizeableChanged, b, &SierraBreeze::Button::setVisible );
                 break;
 
                 case DecorationButtonType::ContextHelp:
-                b->setVisible( d->client().data()->providesContextHelp() );
-                QObject::connect(d->client().data(), &KDecoration2::DecoratedClient::providesContextHelpChanged, b, &SierraBreeze::Button::setVisible );
+                b->setVisible( d->client().toStrongRef().data()->providesContextHelp() );
+                QObject::connect(d->client().toStrongRef().data(), &KDecoration2::DecoratedClient::providesContextHelpChanged, b, &SierraBreeze::Button::setVisible );
                 break;
 
                 case DecorationButtonType::Shade:
-                b->setVisible( d->client().data()->isShadeable() );
-                QObject::connect(d->client().data(), &KDecoration2::DecoratedClient::shadeableChanged, b, &SierraBreeze::Button::setVisible );
+                b->setVisible( d->client().toStrongRef().data()->isShadeable() );
+                QObject::connect(d->client().toStrongRef().data(), &KDecoration2::DecoratedClient::shadeableChanged, b, &SierraBreeze::Button::setVisible );
                 break;
 
                 case DecorationButtonType::Menu:
-                QObject::connect(d->client().data(), &KDecoration2::DecoratedClient::iconChanged, b, [b]() { b->update(); });
+                QObject::connect(d->client().toStrongRef().data(), &KDecoration2::DecoratedClient::iconChanged, b, [b]() { b->update(); });
                 break;
 
                 default: break;
@@ -145,7 +146,7 @@ namespace SierraBreeze
         {
 
             const QRectF iconRect( geometry().topLeft(), m_iconSize );
-            const QPixmap pixmap = decoration()->client().data()->icon().pixmap( m_iconSize );
+            const QPixmap pixmap = decoration()->client().toStrongRef().data()->icon().pixmap( m_iconSize );
             painter->drawPixmap(iconRect.center() - QPoint(pixmap.width()/2, pixmap.height()/2)/pixmap.devicePixelRatio(), pixmap);
 
         } else {
@@ -198,7 +199,7 @@ namespace SierraBreeze
             painter->setPen( pen );
             painter->setBrush( Qt::NoBrush );
             auto d = qobject_cast<Decoration*>( decoration() );
-            auto c = d->client().data();
+            auto c = d->client().toStrongRef().data();
 
             const auto hover_hint_color = QColor(41, 43, 50, 200);
             QPen hint_pen(hover_hint_color);
@@ -211,9 +212,7 @@ namespace SierraBreeze
 
                 case DecorationButtonType::Close:
                 {
-                  QColor button_color = QColor(230, 61, 110);
-                  if (!c->isActive())
-                    button_color = QColor(255, 74, 130);
+                  QColor button_color = QColor(c->isActive() ? active_color : inactive_color);
                   painter->setBrush( button_color );
                   painter->setPen( Qt::NoPen );
                   painter->drawEllipse( QRectF( 0, 0, 18, 18 ) );
@@ -233,10 +232,7 @@ namespace SierraBreeze
 
                 case DecorationButtonType::Maximize:
                 {
-                  QColor button_color = QColor(60, 120, 255);
-                  if (!c->isActive())
-                    button_color = QColor(61, 155, 255);
-
+                  QColor button_color = QColor(c->isActive() ? active_color : inactive_color);
                   painter->setBrush( button_color );
                   painter->setPen( Qt::NoPen );
                   // painter->drawEllipse( QRectF( 3, 3, 12, 12 ) );
@@ -259,32 +255,12 @@ namespace SierraBreeze
                     painter->fillPath(path1, QBrush(hover_hint_color));
                     painter->fillPath(path2, QBrush(hover_hint_color));
                   }
-                  painter->setPen( pen );
-                    // if( isChecked() )
-                    // {
-                    //     pen.setJoinStyle( Qt::RoundJoin );
-                    //     painter->setPen( pen );
-
-                    //     painter->drawPolygon( QPolygonF()
-                    //         << QPointF( 4, 9 )
-                    //         << QPointF( 9, 4 )
-                    //         << QPointF( 14, 9 )
-                    //         << QPointF( 9, 14 ) );
-
-                    // } else {
-                    //     painter->drawPolyline( QPolygonF()
-                    //         << QPointF( 4, 11 )
-                    //         << QPointF( 9, 6 )
-                    //         << QPointF( 14, 11 ) );
-                    // }
                     break;
                 }
 
                 case DecorationButtonType::Minimize:
                 {
-                  QColor button_color = QColor(25, 192, 201);
-                  if (!c->isActive())
-                    button_color = QColor(25, 202, 211);
+                  QColor button_color = QColor(c->isActive() ? active_color : inactive_color);
                   painter->setBrush( button_color );
                   painter->setPen( Qt::NoPen );
                   // painter->drawEllipse( QRectF( 3, 3, 12, 12 ) );
@@ -296,15 +272,12 @@ namespace SierraBreeze
                       // painter->drawLine( QPointF( 6, 9 ), QPointF( 12, 9 ) );
                       painter->drawLine( QPointF( 5, 9 ), QPointF( 13, 9 ) );
                     }
-                  painter->setPen( pen );
                     break;
                 }
 
                 case DecorationButtonType::OnAllDesktops:
                 {
-                  QColor button_color = QColor(125, 209, 200);
-                  if (!c->isActive())
-                    button_color = QColor(199, 199, 199);
+                  QColor button_color = QColor(c->isActive() ? active_color : inactive_color);
                   painter->setBrush( button_color );
                   painter->setPen( Qt::NoPen );
                   painter->drawEllipse( QRectF( 0, 0, 18, 18 ) );
@@ -313,16 +286,12 @@ namespace SierraBreeze
                     painter->setBrush(QBrush(hover_hint_color));
                     painter->drawEllipse( QRectF( 6, 6, 6, 6 ) );
                   }
-                  painter->setPen( pen );
-                  painter->setBrush( Qt::NoBrush );
                   break;
                 }
 
                 case DecorationButtonType::Shade:
                 {
-                  QColor button_color = QColor(135, 206, 249);
-                  if (!c->isActive())
-                    button_color = QColor(199, 199, 199);
+                  QColor button_color = QColor(c->isActive() ? active_color : inactive_color);
                   painter->setBrush( button_color );
                   painter->setPen( Qt::NoPen );
                   painter->setBrush( button_color );
@@ -346,16 +315,13 @@ namespace SierraBreeze
                             << QPointF( 9, 8 )
                             << QPointF( 14, 13 ) );
                     }
-
                     break;
 
                 }
 
                 case DecorationButtonType::KeepBelow:
                 {
-                  QColor button_color = QColor(255, 137, 241);
-                  if (!c->isActive())
-                    button_color = QColor(199, 199, 199);
+                  QColor button_color = QColor(c->isActive() ? active_color : inactive_color);
                   painter->setBrush( button_color );
                   painter->setPen( Qt::NoPen );
                   painter->setBrush( button_color );
@@ -364,33 +330,25 @@ namespace SierraBreeze
                   if (isChecked() || isHovered())
                   {
                     painter->setPen( hint_pen );
-                    painter->drawPolyline( QPolygonF()
-                                           << QPointF( 4, 5 )
-                                           << QPointF( 9, 10 )
-                                           << QPointF( 14, 5 ) );
-
-                    painter->drawPolyline( QPolygonF()
-                                           << QPointF( 4, 9 )
-                                           << QPointF( 9, 14 )
-                                           << QPointF( 14, 9 ) );
+                    QPainterPath path;
+                    path.moveTo(9, 12);
+                    path.lineTo(5, 6);
+                    path.lineTo(13, 6);
+                    painter->fillPath(path, QBrush(hover_hint_color));
                   }
-
                     break;
 
                 }
 
                 case DecorationButtonType::KeepAbove:
                 {
-                  QColor button_color = QColor(204, 176, 213);
-                  if (!c->isActive())
-                    button_color = QColor(199, 199, 199);
+                  QColor button_color = QColor(c->isActive() ? active_color : inactive_color);
                   painter->setBrush( button_color );
                   painter->setPen( Qt::NoPen );
                   painter->drawEllipse( QRectF( 0, 0, 18, 18 ) );
                   painter->setBrush( Qt::NoBrush );
                   if ( isHovered() || isChecked())
                   {
-
                     painter->setPen( hint_pen );
                     QPainterPath path;
                     path.moveTo(9, 6);
@@ -398,16 +356,6 @@ namespace SierraBreeze
                     path.lineTo(13, 12);
                     painter->fillPath(path, QBrush(hover_hint_color));
                   }
-                  painter->setPen( pen );
-                    // painter->drawPolyline( QPolygonF()
-                    //     << QPointF( 4, 9 )
-                    //     << QPointF( 9, 4 )
-                    //     << QPointF( 14, 9 ) );
-
-                    // painter->drawPolyline( QPolygonF()
-                    //     << QPointF( 4, 13 )
-                    //     << QPointF( 9, 8 )
-                    //     << QPointF( 14, 13 ) );
                     break;
                 }
 
@@ -487,7 +435,7 @@ namespace SierraBreeze
 
         }
 
-        auto c = d->client().data();
+        auto c = d->client().toStrongRef().data();
         if( isPressed() ) {
 
             if( type() == DecorationButtonType::Close ) return c->color( ColorGroup::Warning, ColorRole::Foreground );
@@ -545,7 +493,56 @@ namespace SierraBreeze
 
         // animation
         auto d = qobject_cast<Decoration*>(decoration());
-        if( d )  m_animation->setDuration( d->internalSettings()->animationsDuration() );
+        if( d )
+        {
+            m_animation->setDuration( d->internalSettings()->animationsDuration() );
+            switch (type())
+            {
+                case DecorationButtonType::Close:
+                {
+                    active_color = d->internalSettings()->buttonCloseActiveColor();
+                    inactive_color = d->internalSettings()->buttonCloseInactiveColor();
+                    break;
+                }
+                case DecorationButtonType::Maximize:
+                {
+                    active_color = d->internalSettings()->buttonMaximizeActiveColor();
+                    inactive_color = d->internalSettings()->buttonMaximizeInactiveColor();
+                    break;
+                }
+                case DecorationButtonType::Minimize:
+                {
+                    active_color = d->internalSettings()->buttonMinimizeActiveColor();
+                    inactive_color = d->internalSettings()->buttonMinimizeInactiveColor();
+                    break;
+                }
+                case DecorationButtonType::OnAllDesktops:
+                {
+                    active_color = d->internalSettings()->buttonOnAllDesktopsActiveColor();
+                    inactive_color = d->internalSettings()->buttonOnAllDesktopsInactiveColor();
+                    break;
+                }
+                case DecorationButtonType::Shade:
+                {
+                    active_color = d->internalSettings()->buttonShadeActiveColor();
+                    inactive_color = d->internalSettings()->buttonShadeInactiveColor();
+                    break;
+                }
+                case DecorationButtonType::KeepBelow:
+                {
+                    active_color = d->internalSettings()->buttonKeepBelowActiveColor();
+                    inactive_color = d->internalSettings()->buttonKeepBelowInactiveColor();
+                    break;
+                }
+                case DecorationButtonType::KeepAbove:
+                {
+                    active_color = d->internalSettings()->buttonKeepAboveActiveColor();
+                    inactive_color = d->internalSettings()->buttonKeepAboveInactiveColor();
+                    break;
+                }
+                default: break;
+            }
+        }
 
     }
 
