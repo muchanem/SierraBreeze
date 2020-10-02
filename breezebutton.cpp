@@ -255,24 +255,6 @@ namespace SierraBreeze
                     painter->fillPath(path1, QBrush(hover_hint_color));
                     painter->fillPath(path2, QBrush(hover_hint_color));
                   }
-                  painter->setPen( pen );
-                    // if( isChecked() )
-                    // {
-                    //     pen.setJoinStyle( Qt::RoundJoin );
-                    //     painter->setPen( pen );
-
-                    //     painter->drawPolygon( QPolygonF()
-                    //         << QPointF( 4, 9 )
-                    //         << QPointF( 9, 4 )
-                    //         << QPointF( 14, 9 )
-                    //         << QPointF( 9, 14 ) );
-
-                    // } else {
-                    //     painter->drawPolyline( QPolygonF()
-                    //         << QPointF( 4, 11 )
-                    //         << QPointF( 9, 6 )
-                    //         << QPointF( 14, 11 ) );
-                    // }
                     break;
                 }
 
@@ -304,8 +286,6 @@ namespace SierraBreeze
                     painter->setBrush(QBrush(hover_hint_color));
                     painter->drawEllipse( QRectF( 6, 6, 6, 6 ) );
                   }
-                  painter->setPen( pen );
-                  painter->setBrush( Qt::NoBrush );
                   break;
                 }
 
@@ -381,16 +361,6 @@ namespace SierraBreeze
                     path.lineTo(13, 12);
                     painter->fillPath(path, QBrush(hover_hint_color));
                   }
-                  painter->setPen( pen );
-                    // painter->drawPolyline( QPolygonF()
-                    //     << QPointF( 4, 9 )
-                    //     << QPointF( 9, 4 )
-                    //     << QPointF( 14, 9 ) );
-
-                    // painter->drawPolyline( QPolygonF()
-                    //     << QPointF( 4, 13 )
-                    //     << QPointF( 9, 8 )
-                    //     << QPointF( 14, 13 ) );
                     break;
                 }
 
