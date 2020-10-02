@@ -75,7 +75,7 @@ namespace SierraBreeze
         QString className;
 
         // get the client
-        auto client = decoration->client().data();
+        auto client = decoration->client().toStrongRef().data();
 
         foreach( auto internalSettings, m_exceptions )
         {
@@ -105,7 +105,7 @@ namespace SierraBreeze
                     if( className.isEmpty() )
                     {
                         // retrieve class name
-                        KWindowInfo info( client->windowId(), 0, NET::WM2WindowClass );
+                        KWindowInfo info( client->windowId(), {}, NET::WM2WindowClass );
                         QString window_className( QString::fromUtf8(info.windowClassName()) );
                         QString window_class( QString::fromUtf8(info.windowClassClass()) );
                         className = window_className + QStringLiteral(" ") + window_class;

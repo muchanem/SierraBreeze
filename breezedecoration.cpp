@@ -108,7 +108,7 @@ namespace SierraBreeze
     QColor Decoration::titleBarColor() const
     {
 
-        auto c = client().data();
+        auto c = client().toStrongRef().data();
 
         if ( isKonsoleWindow(c) ) {
             return m_KonsoleTitleBarColor;
@@ -129,7 +129,7 @@ namespace SierraBreeze
     QColor Decoration::outlineColor() const
     {
 
-        auto c( client().data() );
+        auto c( client().toStrongRef().data() );
         if( !m_internalSettings->drawTitleBarSeparator() ) return QColor();
         if( m_animation->state() == QPropertyAnimation::Running )
         {
@@ -144,7 +144,7 @@ namespace SierraBreeze
     QColor Decoration::fontColor() const
     {
 
-        auto c = client().data();
+        auto c = client().toStrongRef().data();
         if( m_animation->state() == QPropertyAnimation::Running )
         {
             if ( isKonsoleWindow(c) ) {
@@ -171,7 +171,7 @@ namespace SierraBreeze
     //________________________________________________________________
     void Decoration::init()
     {
-        auto c = client().data();
+        auto c = client().toStrongRef().data();
 
         // active state change animation
         m_animation->setStartValue( 0 );
@@ -229,7 +229,7 @@ namespace SierraBreeze
     void Decoration::updateTitleBar()
     {
         auto s = settings();
-        auto c = client().data();
+        auto c = client().toStrongRef().data();
         const bool maximized = isMaximized();
         const int width =  maximized ? c->width() : c->width() - 2*s->largeSpacing()*Metrics::TitleBar_SideMargin;
         const int height = maximized ? borderTop() : borderTop() - s->smallSpacing()*Metrics::TitleBar_TopMargin;
@@ -244,7 +244,7 @@ namespace SierraBreeze
         if( m_internalSettings->animationsEnabled() )
         {
 
-            auto c = client().data();
+            auto c = client().toStrongRef().data();
             m_animation->setDirection( c->isActive() ? QPropertyAnimation::Forward : QPropertyAnimation::Backward );
             if( m_animation->state() != QPropertyAnimation::Running ) m_animation->start();
 
@@ -258,7 +258,7 @@ namespace SierraBreeze
     //________________________________________________________________
     void Decoration::updateSizeGripVisibility()
     {
-        auto c = client().data();
+        auto c = client().toStrongRef().data();
         if( m_sizeGrip )
         { m_sizeGrip->setVisible( c->isResizeable() && !isMaximized() && !c->isShaded() ); }
     }
@@ -362,7 +362,7 @@ namespace SierraBreeze
           return false;
         }
 
-        KWindowInfo info(dc->windowId(), 0, NET::WM2WindowClass | NET::WM2WindowRole);
+        KWindowInfo info(dc->windowId(), {}, NET::WM2WindowClass | NET::WM2WindowRole);
 
         return info.valid() &&
           info.windowClassClass() == QByteArray("konsole") &&
@@ -395,7 +395,7 @@ namespace SierraBreeze
     //________________________________________________________________
     void Decoration::recalculateBorders()
     {
-        auto c = client().data();
+        auto c = client().toStrongRef().data();
         auto s = settings();
 
         // left, right and bottom borders
@@ -529,7 +529,7 @@ void Decoration::createButtons()
     void Decoration::paint(QPainter *painter, const QRect &repaintRegion)
     {
         // TODO: optimize based on repaintRegion
-        auto c = client().data();
+        auto c = client().toStrongRef().data();
         auto s = settings();
 
         // paint background
@@ -575,7 +575,7 @@ void Decoration::createButtons()
     //________________________________________________________________
     void Decoration::paintTitleBar(QPainter *painter, const QRect &repaintRegion)
     {
-        const auto c = client().data();
+        const auto c = client().toStrongRef().data();
         // TODO Review this. Here the window color is appended in matchedTitleBarColor var
         const QColor matchedTitleBarColor(c->palette().color(QPalette::Window));
         const QRect titleRect(QPoint(0, 0), QSize(size().width(), borderTop()));
@@ -679,7 +679,7 @@ void Decoration::createButtons()
         if( hideTitleBar() ) return qMakePair( QRect(), Qt::AlignCenter );
         else {
 
-            auto c = client().data();
+            auto c = client().toStrongRef().data();
             const int leftOffset = m_leftButtons->buttons().isEmpty() ?
                 Metrics::TitleBar_SideMargin*settings()->smallSpacing():
                 m_leftButtons->geometry().x() + m_leftButtons->geometry().width() + Metrics::TitleBar_SideMargin*settings()->smallSpacing();
@@ -825,7 +825,7 @@ void Decoration::createButtons()
         if( !QX11Info::isPlatformX11() ) return;
 
         // access client
-        auto c = client().data();
+        auto c = client().toStrongRef().data();
         if( !c ) return;
 
         if( c->windowId() != 0 )

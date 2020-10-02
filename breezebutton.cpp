@@ -55,7 +55,7 @@ namespace SierraBreeze
         setIconSize(QSize( height, height ));
 
         // connections
-        connect(decoration->client().data(), SIGNAL(iconChanged(QIcon)), this, SLOT(update()));
+        connect(decoration->client().toStrongRef().data(), SIGNAL(iconChanged(QIcon)), this, SLOT(update()));
         connect(decoration->settings().data(), &KDecoration2::DecorationSettings::reconfigured, this, &Button::reconfigure);
         connect( this, &KDecoration2::DecorationButton::hoveredChanged, this, &Button::updateAnimationState );
 
@@ -87,32 +87,32 @@ namespace SierraBreeze
             {
 
                 case DecorationButtonType::Close:
-                b->setVisible( d->client().data()->isCloseable() );
-                QObject::connect(d->client().data(), &KDecoration2::DecoratedClient::closeableChanged, b, &SierraBreeze::Button::setVisible );
+                b->setVisible( d->client().toStrongRef().data()->isCloseable() );
+                QObject::connect(d->client().toStrongRef().data(), &KDecoration2::DecoratedClient::closeableChanged, b, &SierraBreeze::Button::setVisible );
                 break;
 
                 case DecorationButtonType::Maximize:
-                b->setVisible( d->client().data()->isMaximizeable() );
-                QObject::connect(d->client().data(), &KDecoration2::DecoratedClient::maximizeableChanged, b, &SierraBreeze::Button::setVisible );
+                b->setVisible( d->client().toStrongRef().data()->isMaximizeable() );
+                QObject::connect(d->client().toStrongRef().data(), &KDecoration2::DecoratedClient::maximizeableChanged, b, &SierraBreeze::Button::setVisible );
                 break;
 
                 case DecorationButtonType::Minimize:
-                b->setVisible( d->client().data()->isMinimizeable() );
-                QObject::connect(d->client().data(), &KDecoration2::DecoratedClient::minimizeableChanged, b, &SierraBreeze::Button::setVisible );
+                b->setVisible( d->client().toStrongRef().data()->isMinimizeable() );
+                QObject::connect(d->client().toStrongRef().data(), &KDecoration2::DecoratedClient::minimizeableChanged, b, &SierraBreeze::Button::setVisible );
                 break;
 
                 case DecorationButtonType::ContextHelp:
-                b->setVisible( d->client().data()->providesContextHelp() );
-                QObject::connect(d->client().data(), &KDecoration2::DecoratedClient::providesContextHelpChanged, b, &SierraBreeze::Button::setVisible );
+                b->setVisible( d->client().toStrongRef().data()->providesContextHelp() );
+                QObject::connect(d->client().toStrongRef().data(), &KDecoration2::DecoratedClient::providesContextHelpChanged, b, &SierraBreeze::Button::setVisible );
                 break;
 
                 case DecorationButtonType::Shade:
-                b->setVisible( d->client().data()->isShadeable() );
-                QObject::connect(d->client().data(), &KDecoration2::DecoratedClient::shadeableChanged, b, &SierraBreeze::Button::setVisible );
+                b->setVisible( d->client().toStrongRef().data()->isShadeable() );
+                QObject::connect(d->client().toStrongRef().data(), &KDecoration2::DecoratedClient::shadeableChanged, b, &SierraBreeze::Button::setVisible );
                 break;
 
                 case DecorationButtonType::Menu:
-                QObject::connect(d->client().data(), &KDecoration2::DecoratedClient::iconChanged, b, [b]() { b->update(); });
+                QObject::connect(d->client().toStrongRef().data(), &KDecoration2::DecoratedClient::iconChanged, b, [b]() { b->update(); });
                 break;
 
                 default: break;
@@ -146,7 +146,7 @@ namespace SierraBreeze
         {
 
             const QRectF iconRect( geometry().topLeft(), m_iconSize );
-            const QPixmap pixmap = decoration()->client().data()->icon().pixmap( m_iconSize );
+            const QPixmap pixmap = decoration()->client().toStrongRef().data()->icon().pixmap( m_iconSize );
             painter->drawPixmap(iconRect.center() - QPoint(pixmap.width()/2, pixmap.height()/2)/pixmap.devicePixelRatio(), pixmap);
 
         } else {
@@ -199,7 +199,7 @@ namespace SierraBreeze
             painter->setPen( pen );
             painter->setBrush( Qt::NoBrush );
             auto d = qobject_cast<Decoration*>( decoration() );
-            auto c = d->client().data();
+            auto c = d->client().toStrongRef().data();
 
             const auto hover_hint_color = QColor(41, 43, 50, 200);
             QPen hint_pen(hover_hint_color);
@@ -470,7 +470,7 @@ namespace SierraBreeze
 
         }
 
-        auto c = d->client().data();
+        auto c = d->client().toStrongRef().data();
         if( isPressed() ) {
 
             if( type() == DecorationButtonType::Close ) return c->color( ColorGroup::Warning, ColorRole::Foreground );
