@@ -158,19 +158,6 @@
          </property>
         </spacer>
        </item>
-       <item row="9" column="0" colspan="3">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item row="5" column="0" colspan="3">
         <widget class="QCheckBox" name="drawSizeGrip">
          <property name="text">
@@ -212,6 +199,168 @@
           <string>Match Title Bar's and Window's color</string>
          </property>
         </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_5">
+      <attribute name="title">
+       <string>Colors</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_6">
+       <item row="1" column="2">
+        <widget class="KColorButton" name="buttonCloseInactiveColor"/>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="buttonShadeLabel">
+         <property name="text">
+          <string>Shade:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="KColorButton" name="buttonMaximizeInactiveColor"/>
+       </item>
+       <item row="8" column="1">
+        <spacer name="verticalSpacer_1">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="buttonOnAllDesktopsLabel">
+         <property name="text">
+          <string>On All Desktops:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QLabel" name="inactiveColorTitleLabel">
+         <property name="text">
+          <string>Inactive Color</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="buttonTitleLabel">
+         <property name="text">
+          <string>Button</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="buttonMaximizeLabel">
+         <property name="text">
+          <string>Maximize:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="buttonKeepBelowLabel">
+         <property name="text">
+          <string>Keep Below:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLabel" name="activeColorTitleLabel">
+         <property name="text">
+          <string>Active Color</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="KColorButton" name="buttonMaximizeActiveColor"/>
+       </item>
+       <item row="1" column="1">
+        <widget class="KColorButton" name="buttonCloseActiveColor"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="buttonCloseLabel">
+         <property name="text">
+          <string>Close:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Minimize:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="buttonKeepAboveLabel">
+         <property name="text">
+          <string>Keep Above:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="KColorButton" name="buttonMinimizeActiveColor"/>
+       </item>
+       <item row="3" column="2">
+        <widget class="KColorButton" name="buttonMinimizeInactiveColor"/>
+       </item>
+       <item row="4" column="1">
+        <widget class="KColorButton" name="buttonOnAllDesktopsActiveColor"/>
+       </item>
+       <item row="4" column="2">
+        <widget class="KColorButton" name="buttonOnAllDesktopsInactiveColor"/>
+       </item>
+       <item row="5" column="1">
+        <widget class="KColorButton" name="buttonShadeActiveColor"/>
+       </item>
+       <item row="5" column="2">
+        <widget class="KColorButton" name="buttonShadeInactiveColor"/>
+       </item>
+       <item row="6" column="1">
+        <widget class="KColorButton" name="buttonKeepBelowActiveColor"/>
+       </item>
+       <item row="6" column="2">
+        <widget class="KColorButton" name="buttonKeepBelowInactiveColor"/>
+       </item>
+       <item row="7" column="1">
+        <widget class="KColorButton" name="buttonKeepAboveActiveColor"/>
+       </item>
+       <item row="7" column="2">
+        <widget class="KColorButton" name="buttonKeepAboveInactiveColor"/>
        </item>
       </layout>
      </widget>

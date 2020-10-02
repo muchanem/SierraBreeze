@@ -134,6 +134,9 @@ namespace SierraBreeze
 
         //* active state change opacity
         qreal m_opacity = 0;
+
+        QColor active_color;
+        QColor inactive_color;
     };
 
 } // namespace

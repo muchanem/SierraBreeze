@@ -87,6 +87,62 @@
        <default>5</default>
     </entry>
 
+    <entry name="ButtonCloseActiveColor" type = "Color">
+       <default>242, 80, 86</default>
+    </entry>
+
+    <entry name="ButtonCloseInactiveColor" type = "Color">
+       <default>199, 199, 199</default>
+    </entry>
+
+    <entry name="ButtonMaximizeActiveColor" type = "Color">
+       <default>19, 209, 61</default>
+    </entry>
+
+    <entry name="ButtonMaximizeInactiveColor" type = "Color">
+       <default>199, 199, 199</default>
+    </entry>
+
+    <entry name="ButtonMinimizeActiveColor" type = "Color">
+       <default>252, 190, 7</default>
+    </entry>
+
+    <entry name="ButtonMinimizeInactiveColor" type = "Color">
+       <default>199, 199, 199</default>
+    </entry>
+
+    <entry name="ButtonOnAllDesktopsActiveColor" type = "Color">
+       <default>125, 209, 200</default>
+    </entry>
+
+    <entry name="ButtonOnAllDesktopsInactiveColor" type = "Color">
+       <default>199, 199, 199</default>
+    </entry>
+
+    <entry name="ButtonShadeActiveColor" type = "Color">
+       <default>135, 206, 249</default>
+    </entry>
+
+    <entry name="ButtonShadeInactiveColor" type = "Color">
+       <default>199, 199, 199</default>
+    </entry>
+
+    <entry name="ButtonKeepBelowActiveColor" type = "Color">
+       <default>255, 137, 241</default>
+    </entry>
+
+    <entry name="ButtonKeepBelowInactiveColor" type = "Color">
+       <default>199, 199, 199</default>
+    </entry>
+
+    <entry name="ButtonKeepAboveActiveColor" type = "Color">
+       <default>204, 176, 213</default>
+    </entry>
+
+    <entry name="ButtonKeepAboveInactiveColor" type = "Color">
+       <default>199, 199, 199</default>
+    </entry>
+
     <!-- maximized windows -->
     <entry name="DrawBorderOnMaximizedWindows" type = "Bool">
         <default>false</default>

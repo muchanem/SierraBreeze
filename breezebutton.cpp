@@ -211,9 +211,7 @@ namespace SierraBreeze
 
                 case DecorationButtonType::Close:
                 {
-                  QColor button_color = QColor(230, 61, 110);
-                  if (!c->isActive())
-                    button_color = QColor(255, 74, 130);
+                  QColor button_color = QColor(c->isActive() ? active_color : inactive_color);
                   painter->setBrush( button_color );
                   painter->setPen( Qt::NoPen );
                   painter->drawEllipse( QRectF( 0, 0, 18, 18 ) );
@@ -233,10 +231,7 @@ namespace SierraBreeze
 
                 case DecorationButtonType::Maximize:
                 {
-                  QColor button_color = QColor(60, 120, 255);
-                  if (!c->isActive())
-                    button_color = QColor(61, 155, 255);
-
+                  QColor button_color = QColor(c->isActive() ? active_color : inactive_color);
                   painter->setBrush( button_color );
                   painter->setPen( Qt::NoPen );
                   // painter->drawEllipse( QRectF( 3, 3, 12, 12 ) );
@@ -282,9 +277,7 @@ namespace SierraBreeze
 
                 case DecorationButtonType::Minimize:
                 {
-                  QColor button_color = QColor(25, 192, 201);
-                  if (!c->isActive())
-                    button_color = QColor(25, 202, 211);
+                  QColor button_color = QColor(c->isActive() ? active_color : inactive_color);
                   painter->setBrush( button_color );
                   painter->setPen( Qt::NoPen );
                   // painter->drawEllipse( QRectF( 3, 3, 12, 12 ) );
@@ -296,15 +289,12 @@ namespace SierraBreeze
                       // painter->drawLine( QPointF( 6, 9 ), QPointF( 12, 9 ) );
                       painter->drawLine( QPointF( 5, 9 ), QPointF( 13, 9 ) );
                     }
-                  painter->setPen( pen );
                     break;
                 }
 
                 case DecorationButtonType::OnAllDesktops:
                 {
-                  QColor button_color = QColor(125, 209, 200);
-                  if (!c->isActive())
-                    button_color = QColor(199, 199, 199);
+                  QColor button_color = QColor(c->isActive() ? active_color : inactive_color);
                   painter->setBrush( button_color );
                   painter->setPen( Qt::NoPen );
                   painter->drawEllipse( QRectF( 0, 0, 18, 18 ) );
@@ -320,9 +310,7 @@ namespace SierraBreeze
 
                 case DecorationButtonType::Shade:
                 {
-                  QColor button_color = QColor(135, 206, 249);
-                  if (!c->isActive())
-                    button_color = QColor(199, 199, 199);
+                  QColor button_color = QColor(c->isActive() ? active_color : inactive_color);
                   painter->setBrush( button_color );
                   painter->setPen( Qt::NoPen );
                   painter->setBrush( button_color );
@@ -346,16 +334,13 @@ namespace SierraBreeze
                             << QPointF( 9, 8 )
                             << QPointF( 14, 13 ) );
                     }
-
                     break;
 
                 }
 
                 case DecorationButtonType::KeepBelow:
                 {
-                  QColor button_color = QColor(255, 137, 241);
-                  if (!c->isActive())
-                    button_color = QColor(199, 199, 199);
+                  QColor button_color = QColor(c->isActive() ? active_color : inactive_color);
                   painter->setBrush( button_color );
                   painter->setPen( Qt::NoPen );
                   painter->setBrush( button_color );
@@ -381,16 +366,13 @@ namespace SierraBreeze
 
                 case DecorationButtonType::KeepAbove:
                 {
-                  QColor button_color = QColor(204, 176, 213);
-                  if (!c->isActive())
-                    button_color = QColor(199, 199, 199);
+                  QColor button_color = QColor(c->isActive() ? active_color : inactive_color);
                   painter->setBrush( button_color );
                   painter->setPen( Qt::NoPen );
                   painter->drawEllipse( QRectF( 0, 0, 18, 18 ) );
                   painter->setBrush( Qt::NoBrush );
                   if ( isHovered() || isChecked())
                   {
-
                     painter->setPen( hint_pen );
                     QPainterPath path;
                     path.moveTo(9, 6);
@@ -545,7 +527,56 @@ namespace SierraBreeze
 
         // animation
         auto d = qobject_cast<Decoration*>(decoration());
-        if( d )  m_animation->setDuration( d->internalSettings()->animationsDuration() );
+        if( d )
+        {
+            m_animation->setDuration( d->internalSettings()->animationsDuration() );
+            switch (type())
+            {
+                case DecorationButtonType::Close:
+                {
+                    active_color = d->internalSettings()->buttonCloseActiveColor();
+                    inactive_color = d->internalSettings()->buttonCloseInactiveColor();
+                    break;
+                }
+                case DecorationButtonType::Maximize:
+                {
+                    active_color = d->internalSettings()->buttonMaximizeActiveColor();
+                    inactive_color = d->internalSettings()->buttonMaximizeInactiveColor();
+                    break;
+                }
+                case DecorationButtonType::Minimize:
+                {
+                    active_color = d->internalSettings()->buttonMinimizeActiveColor();
+                    inactive_color = d->internalSettings()->buttonMinimizeInactiveColor();
+                    break;
+                }
+                case DecorationButtonType::OnAllDesktops:
+                {
+                    active_color = d->internalSettings()->buttonOnAllDesktopsActiveColor();
+                    inactive_color = d->internalSettings()->buttonOnAllDesktopsInactiveColor();
+                    break;
+                }
+                case DecorationButtonType::Shade:
+                {
+                    active_color = d->internalSettings()->buttonShadeActiveColor();
+                    inactive_color = d->internalSettings()->buttonShadeInactiveColor();
+                    break;
+                }
+                case DecorationButtonType::KeepBelow:
+                {
+                    active_color = d->internalSettings()->buttonKeepBelowActiveColor();
+                    inactive_color = d->internalSettings()->buttonKeepBelowInactiveColor();
+                    break;
+                }
+                case DecorationButtonType::KeepAbove:
+                {
+                    active_color = d->internalSettings()->buttonKeepAboveActiveColor();
+                    inactive_color = d->internalSettings()->buttonKeepAboveInactiveColor();
+                    break;
+                }
+                default: break;
+            }
+        }
 
     }
 
