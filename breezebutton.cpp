@@ -330,17 +330,12 @@ namespace SierraBreeze
                   if (isChecked() || isHovered())
                   {
                     painter->setPen( hint_pen );
-                    painter->drawPolyline( QPolygonF()
-                                           << QPointF( 4, 5 )
-                                           << QPointF( 9, 10 )
-                                           << QPointF( 14, 5 ) );
-
-                    painter->drawPolyline( QPolygonF()
-                                           << QPointF( 4, 9 )
-                                           << QPointF( 9, 14 )
-                                           << QPointF( 14, 9 ) );
+                    QPainterPath path;
+                    path.moveTo(9, 12);
+                    path.lineTo(5, 6);
+                    path.lineTo(13, 6);
+                    painter->fillPath(path, QBrush(hover_hint_color));
                   }
-
                     break;
 
                 }
